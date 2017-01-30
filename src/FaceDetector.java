@@ -1,6 +1,8 @@
 package com.shekhar.facedetection;
 
 import java.io.File;
+import java.lang.*;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
@@ -13,9 +15,9 @@ import org.opencv.objdetect.CascadeClassifier;
 
 public class FaceDetector {
 
-    private String faceFolderName = "faces1";
-    private String faceFolderOutputName = "FullBody";
-    private String cascadeClassifierName = "haarcascade_fullbody.xml";
+    private String faceFolderName = "facesTest";
+    private String faceFolderOutputName = "Julia";
+    private String cascadeClassifierName = "lbpcascade_frontalface.xml";
 
     public static void main(String[] args) {
 
@@ -25,18 +27,28 @@ public class FaceDetector {
 
         File[] listOfFiles = faceDetector.getFiles();
 
+        double startTime = System.currentTimeMillis();
 
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
-                System.out.println("File " + listOfFiles[i].getName());
-                faceDetector.recognizeFace(listOfFiles[i].getName());
+                String fileExtension = listOfFiles[i].getName().substring(listOfFiles[i].getName().length() - 3);
+                System.out.println(fileExtension);
+
+                if(fileExtension.equals("jpg")) {
+                    faceDetector.recognizeFace(listOfFiles[i].getName());
+                } else {
+                    System.out.println("File is not a jpg file");
+                }
 
             } else if (listOfFiles[i].isDirectory()) {
                 System.out.println("Directory " + listOfFiles[i].getName());
             }
         }
 
+        double endTime = System.currentTimeMillis();
+        double duration = endTime - startTime;
 
+        System.out.println("Duration: " + duration / 1000 + " seconds");
     }
 
     public File[] getFiles() {
@@ -48,6 +60,8 @@ public class FaceDetector {
     }
 
     public void recognizeFace(String filename) {
+
+        File folderDirectory = new File("photos/output/" + this.faceFolderOutputName);
 
         CascadeClassifier faceDetector = new CascadeClassifier(System.getProperty("user.dir") + "/cascade-classifiers/" + this.cascadeClassifierName);
 
@@ -64,10 +78,17 @@ public class FaceDetector {
                     new Scalar(0, 255, 0));
         }
 
-
-        String outputFile = "photos/output/" + this.faceFolderOutputName + "/" + filename;
-        System.out.println(String.format("Writing %s", outputFile));
-        Imgcodecs.imwrite(outputFile, image);
+        if(folderDirectory.exists()) {
+            String outputFile = "photos/output/" + this.faceFolderOutputName + "/" + filename;
+            Imgcodecs.imwrite(outputFile, image);
+            System.out.println(String.format("Writing %s", outputFile));
+        } else {
+            folderDirectory.mkdir();
+            System.out.println("Created new folder: " + this.faceFolderOutputName);
+            String outputFile = "photos/output/" + this.faceFolderOutputName + "/" + filename;
+            Imgcodecs.imwrite(outputFile, image);
+            System.out.println(String.format("Writing %s", outputFile));
+        }
 
     }
 }
