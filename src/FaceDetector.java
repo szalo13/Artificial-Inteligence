@@ -15,9 +15,10 @@ import org.opencv.objdetect.CascadeClassifier;
 
 public class FaceDetector {
 
-    private String faceFolderName = "facesTest";
-    private String faceFolderOutputName = "Julia";
+    private String faceFolderName = "test50";
+    private String faceFolderOutputName = "lbpcascade_frontalface_test1";
     private String cascadeClassifierName = "lbpcascade_frontalface.xml";
+    private Integer faceDetected = 0;
 
     public static void main(String[] args) {
 
@@ -48,7 +49,7 @@ public class FaceDetector {
         double endTime = System.currentTimeMillis();
         double duration = endTime - startTime;
 
-        System.out.println("Duration: " + duration / 1000 + " seconds");
+        System.out.println("Duration: " + duration / 1000 + " seconds, detected " + faceDetector.faceDetected + " faces");
     }
 
     public File[] getFiles() {
@@ -72,6 +73,7 @@ public class FaceDetector {
         faceDetector.detectMultiScale(image, faceDetections);
 
         System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
+        this.faceDetected = this.faceDetected + faceDetections.toArray().length;
 
         for (Rect rect : faceDetections.toArray()) {
             Imgproc.rectangle(image, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
