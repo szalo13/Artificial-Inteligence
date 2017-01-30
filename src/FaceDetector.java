@@ -15,9 +15,9 @@ import org.opencv.objdetect.CascadeClassifier;
 
 public class FaceDetector {
 
-    private String faceFolderName = "test50";
-    private String faceFolderOutputName = "lbpcascade_frontalface_test1";
-    private String cascadeClassifierName = "lbpcascade_frontalface.xml";
+    private String faceFolderName = "faces";
+    private String faceFolderOutputName = "haarcascade_frontalface_default_all";
+    private String cascadeClassifierName = "haarcascade_frontalface_default.xml";
     private Integer faceDetected = 0;
 
     public static void main(String[] args) {
@@ -33,7 +33,6 @@ public class FaceDetector {
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
                 String fileExtension = listOfFiles[i].getName().substring(listOfFiles[i].getName().length() - 3);
-                System.out.println(fileExtension);
 
                 if(fileExtension.equals("jpg")) {
                     faceDetector.recognizeFace(listOfFiles[i].getName());
