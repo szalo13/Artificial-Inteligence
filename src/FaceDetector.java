@@ -16,7 +16,7 @@ import org.opencv.objdetect.CascadeClassifier;
 public class FaceDetector {
 
     private String faceFolderName = "faces";
-    private String faceFolderOutputName = "haarcascade_frontalface_default_all";
+    private String faceFolderOutputName = "haarcascade_frontalface_default";
     private String cascadeClassifierName = "haarcascade_frontalface_default.xml";
     private Integer faceDetected = 0;
 
